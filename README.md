@@ -11,6 +11,7 @@
 The assemblies created during the course of genome assembly are used. 
 They were copied from the results folder of the other github to this one. 
 
+The tool `Flye` was used for the assembly. 
 
 
 
