@@ -1,0 +1,35 @@
+#!/bin/bash
+
+#SBATCH --job-name=extract_Copia_Gipsy_sequence
+#SBATCH --partition=pibu_el8
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=20G
+#SBATCH --time=01:00:00
+#SBATCH --account=class-sbl-30004-ws-2026
+#SBATCH --reservation=class-sbl-30004-2026-10-21
+#SBATCH --mail-user=vittoria.mungai@students.unibe.ch
+#SBATCH --mail-type=start,fail,end
+#SBATCH --output=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.out
+#SBATCH --error=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.err
+
+WORKDIR="/data/users/vmungai/genome_annotation_course_2026"
+COURSEDIR="/data/courses/genome_annotation_resources/2026"
+
+CONTAINER="${COURSEDIR}/containers/Annotation_analysis_R4.4.sif"
+
+EDTA_DIR="${WORKDIR}/output/EDTA"
+
+GENOME_FASTA="${EDTA_DIR}/assembly.fasta"
+COPIA_FASTA="${EDTA_DIR}/Copia_sequences.fa"
+GYPSY_FASTA="${EDTA_DIR}/Gypsy_sequences.fa"
+
+GENOME_TELIB_FASTA="${EDTA_DIR}/assembly.fasta.mod.EDTA.TElib.fa"
+
+cd "$EDTA_DIR"
+
+# Extract Copia sequences
+apptainer exec -C --bind "$WORKDIR" "$CONTAINER" seqkit grep -r -p "Copia" "$GENOME_TELIB_FASTA" > "$COPIA_FASTA"
+
+# Extract Gypsy sequences
+apptainer exec -C --bind "$WORKDIR" "$CONTAINER" seqkit grep -r -p "Gypsy" "$GENOME_TELIB_FASTA" > "$GYPSY_FASTA"

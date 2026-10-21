@@ -13,6 +13,16 @@ They were copied from the results folder of the other github to this one.
 
 The tool `Flye` was used for the assembly. 
 
+#### Script 08-run_maker.sh 
+copy the files in WORKDIR:
+```shell  
+WORKDIR="/data/users/vmungai/genome_annotation_course_2026"
+DATA_DIR="${WORKDIR}/data/maker"
+COURSEDIR="/data/courses/genome_annotation_resources/2026"
+mkdir -p "$DATA_DIR"
+cp -r "${COURSEDIR}/tools/MAKER/control_files/" ${DATA_DIR}
+```
+
 
 
 ```shell 
