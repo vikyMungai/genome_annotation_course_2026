@@ -76,4 +76,12 @@ dev.off()
 # You need to run the TEsorter on TElib to get the clades classification from the TE library
 
 
-gff_file # this is the file where we have the TEs names and they association to a clade
+gff_file # this is the file where we have the TEs names and they association to a clade 
+# "genome_annotation_course_2026/output/TEsorter/Copia_sequences.fa.rexdb-plant.cls.tsv" 
+# it's the table with the Copia TEs 
+copia_sequences_tsv <- paste0(workdir,"/output/TEsorter/Copia_sequences.fa.rexdb-plant.cls.tsv") 
+# "genome_annotation_course_2026/output/TEsorter/Gypsy_sequences.fa.rexdb-plant.cls.tsv" 
+# it's the table with the Gypsy TEs 
+gypsy_sequences_tsv <- paste0(workdir,"/output/TEsorter/Gypsy_sequences.fa.rexdb-plant.cls.tsv") 
+
+# match the column 

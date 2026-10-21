@@ -7,9 +7,12 @@ library(data.table)
 # get data from parameter
 work_dir <- "/data/users/vmungai/genome_annotation_course_2026"
 
+
 edta_anno_dir <- paste0(work_dir, "/output/EDTA/assembly.fasta.mod.EDTA.anno")
 
-data <- paste0(edta_anno_dir, "/assembly.fasta.mod.out.landscape.Div.Rname.tab") 
+output_dir <- paste0(work_dir, "/plots/TE_landscape") 
+
+data <- paste0(edta_anno_dir, "/assembly.mod.EDTA.RM.nonzero.out.landscape.Div.Rname.tab") 
 
 rep_table <- fread(data, header = FALSE, sep = "\t")
 rep_table %>% head()
@@ -22,6 +25,10 @@ rep_table$fam <- paste(rep_table$Rclass, rep_table$Rfam, sep = "/")
 table(rep_table$fam)
 # How many elements are there in each Superfamily?
 
+# 0.2-0.3 peak of DNA 
+# 0.1 peak LTR, these are very old and should be present in each acessions 
+# the peak near 0 are recent Ts 
+
 rep_table.m <- melt(rep_table)
 
 
@@ -32,7 +39,7 @@ rep_table.m$fam <- factor(rep_table.m$fam, levels = c(
   "MITE/DTA", "MITE/DTC", "MITE/DTH", "MITE/DTM"
 ))
 
-# NOTE: Check that all the superfamilies in your dataset are included above
+# NOTE: Check that all the superfamilies in your dataset are included above. check 
 
 rep_table.m$distance <- as.numeric(rep_table.m$variable) / 100 # as it is percent divergence
 
@@ -53,16 +60,8 @@ ggplot(rep_table.m, aes(fill = fam, x = distance, weight = value / 1000000)) +
   ylab("Sequence (Mbp)") +
   theme(axis.text.x = element_text(angle = 90, vjust = 1, size = 9, hjust = 1), plot.title = element_text(hjust = 0.5))
 
-ggsave(filename = "plots/output.pdf", width = 10, height = 5, useDingbats = F)
+plot_file = paste0(output_dir, "/plots.pdf")
+ggsave(filename = plot_file, width = 10, height = 5, useDingbats = F)
 
-
-
-# Why is it important to have this plot in Mbp instead of counts?
-# Hint:
-# Consider a scenario where there is a lot of small fragments of TEs due to nested insertions and deletions.
-# How would that affect the plot if you used counts instead of Mbp?
-# We would have a very high count even if the TEs are very small, so we would have a high count due to the 
-# high amount of fragments but we would not understand if we have a high amount of TEs or if it is due to 
-# the fact that we have many fragments 
 
 

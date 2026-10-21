@@ -6,8 +6,9 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
 #SBATCH --mem=64G
-#SBATCH --time=7-00:00:00
+#SBATCH --time=01:00:00
 #SBATCH --account=class-sbl-30004-ws-2026
+#SBATCH --reservation=class-sbl-30004-2026-10-21
 #SBATCH --mail-user=vittoria.mungai@students.unibe.ch
 #SBATCH --mail-type=start,fail,end
 #SBATCH --output=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.out

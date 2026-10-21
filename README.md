@@ -32,6 +32,11 @@ ln -s /data/courses/assembly-annotation-course/raw_data/RNAseq_Sha .
 ```
 
 
+# TODO: file that should be in the repo 
+- genome_annotation_course_2026/output/EDTA/assembly.fasta.mod.EDTA.TEanno.sum
+- genome_annotation_course_2026/output/TEsorter/Copia_sequences.fa.rexdb-plant.cls.tsv
+- genome_annotation_course_2026/output/TEsorter/Gypsy_sequences.fa.rexdb-plant.cls.tsv
+
 ### Author 
 Vittoria Mungai 
 vittoria.mungai@students.unibe.ch

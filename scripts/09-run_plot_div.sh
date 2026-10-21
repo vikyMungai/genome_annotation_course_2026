@@ -1,14 +1,12 @@
 #!/bin/bash
 
 #SBATCH --job-name=plot_div
-#SBATCH --partition=pibu_el8
+#SBATCH --partition=pshort_el8
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=20G
 #SBATCH --time=01:00:00
 #SBATCH --account=class-sbl-30004-ws-2026
-#SBATCH --reservation=class-sbl-30004-2026-10-21
-#SBATCH --mail-user=vittoria.mungai@students.unibe.ch
 #SBATCH --mail-type=start,fail,end
 #SBATCH --output=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.out
 #SBATCH --error=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.err
