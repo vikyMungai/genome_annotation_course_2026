@@ -6,9 +6,9 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=20
 #SBATCH --mem=64G
-#SBATCH --time=01:00:00
+#SBATCH --time=4-00:00:00
 #SBATCH --account=class-sbl-30004-ws-2026
-#SBATCH --reservation=class-sbl-30004-2026-10-21
+#SBATCH --reservation=class-sbl-30004-2026-10-22
 #SBATCH --mail-user=vittoria.mungai@students.unibe.ch
 #SBATCH --mail-type=start,fail,end
 #SBATCH --output=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.out
@@ -19,7 +19,7 @@ set -euo pipefail
 
 COURSEDIR="/data/courses/genome_annotation_resources/2026"
 WORKDIR="/data/users/vmungai/genome_annotation_course_2026"
-DATA_DIR="${WORKDIR}/data/maker"
+DATA_DIR="${WORKDIR}/data/maker/control_files"
 OUTDIR="${WORKDIR}/output/MAKER"
 MAKER_SIF="${COURSEDIR}/containers/MAKER_3.01.03.sif"
 AUGUSTUS_CONFIG_PATH="${COURSEDIR}/tools/MAKER/augustus_config"

@@ -1,17 +1,21 @@
 # Genome annotation 
-
-
+Genome annotation of the Arabidopsis thaliana assembly, which was performed during the "genome assembly" course at the Univeristy of Bern. 
 
 ## Project workflow 
+1. [Retreive Flye and Trinity assembly](#1-retreive-data) 
 
-### Retreive data 
+### 1. Retreive data 
+The assembly.fasta was downloaded from the previous repository. The assembly Flye was choosen, as it was the best across the three tools used: Flye, Hifiasm and LJA. 
+```shell 
+cp /data/users/vmungai/assembly-annotation-course2026/results/assembly/flye/assembly.fasta /data/users/vmungai/genome_annotation_course_2026/data/raw_data/assemblies/flye
+```
+The Trinity assembly was also downloaded from the same git repository. 
+```shell 
+cp /data/users/vmungai/assembly-annotation-course2026/results/assembly/trinity.Trinity.fasta /data/users/vmungai/genome_annotation_course_2026/data/raw_data/assemblies/trinity
+```
 
-#### Assemblies 
+The link to the repository, where the assembly where taken from: https://github.com/vikyMungai/assembly-annotation-course2026.git 
 
-The assemblies created during the course of genome assembly are used. 
-They were copied from the results folder of the other github to this one. 
-
-The tool `Flye` was used for the assembly. 
 
 #### Script 08-run_maker.sh 
 copy the files in WORKDIR:
@@ -24,7 +28,7 @@ cp -r "${COURSEDIR}/tools/MAKER/control_files/" ${DATA_DIR}
 ```
 
 
-
+I think this is not actually needed 
 ```shell 
 cd /data/users/vmungai/assembly-annotation-course2026/data/raw_data/fastq_folder
 ln -s /data/courses/assembly-annotation-course/raw_data/Ice-1 .
