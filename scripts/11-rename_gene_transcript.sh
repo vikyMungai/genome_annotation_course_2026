@@ -64,9 +64,9 @@ apptainer exec --cleanenv --env TMPDIR=/tmp \
 apptainer exec --cleanenv --env TMPDIR=/tmp \
     --bind "${OUTDIR}/tmp":/tmp --bind "$COURSEDIR" --bind "$WORKDIR" \
     --pwd "$OUTDIR" "$CONTAINER" \
-    map_gff_ids "$ID_MAP" "$PROTEIN_FASTA_RENAMED" 
+    map_fasta_ids "$ID_MAP" "$PROTEIN_FASTA_RENAMED" 
 
 apptainer exec --cleanenv --env TMPDIR=/tmp \
     --bind "${OUTDIR}/tmp":/tmp --bind "$COURSEDIR" --bind "$WORKDIR" \
     --pwd "$OUTDIR" "$CONTAINER" \
-    map_gff_ids "$ID_MAP" "$TRANSCRIPT_FASTA_RENAMED" 
+    map_fasta_ids "$ID_MAP" "$TRANSCRIPT_FASTA_RENAMED" 
