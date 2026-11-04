@@ -7,6 +7,7 @@
 #SBATCH --mem=8G
 #SBATCH --time=03:00:00
 #SBATCH --account=class-sbl-30004-ws-2026
+#SBATCH --reservation=class-sbl-30004-2026-11-04
 #SBATCH --mail-type=start,fail,end
 #SBATCH --output=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.out
 #SBATCH --error=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.err
@@ -16,6 +17,9 @@ set -euo pipefail
 
 WORKDIR="/data/users/vmungai/genome_annotation_course_2026"
 COURSEDIR="/data/courses/genome_annotation_resources/2026"
+
+# container to index the fasta file to extract the longest isoforms 
+CONTAINER="${COURSEDIR}/containers/Annotation_analysis_R4.4.sif"
 
 # load BUSCO module 
 module load BUSCO/5.4.2-foss-2021a
@@ -34,6 +38,11 @@ INPUT_DIR="${RESULT_DIR}/filter_gff"
 TRANSCRIPT_FILTERED="${INPUT_DIR}/assembly.all.maker.transcripts.renamed.filtered.fasta"
 PROTEIN_FILTERED="${INPUT_DIR}/assembly.all.maker.proteins.renamed.filtered.fasta"
 
+# indexed fasta 
+TRANSCRIPT_FILTERED_INDEX="${TRANSCRIPT_FILTERED%.fasta}.fai"
+PROTEIN_FILTERED_INDEX="${PROTEIN_FILTERED%.fasta}.fai"
+
+
 # output dir 
 OUTPUT_DIR="${RESULT_DIR}/busco_qc"
 
@@ -45,11 +54,54 @@ TRANSCRIPT_FILTERED_LONG="${OUTPUT_DIR}/${FILE_NAME_TRANSC}.longest.fasta"
 FILE_NAME_PROT=$(basename ${PROTEIN_FILTERED%.filtered.fasta})
 PROTEIN_FILTERED_LONG="${OUTPUT_DIR}/${FILE_NAME_PROT}.longest.fasta"
 
+# longest isoforms lists 
+PROTEIN_LONG_LIST="${OUTPUT_DIR}/protein_longest_isoforms.txt"
+TRANSCRIPT_LONG_LIST="${OUTPUT_DIR}/transcript_longest_isoforms.txt"
 
-# TODO: do the filtering to retain only the longest (look at page 7 of the pdf)
 
+# index the fasta files
+apptainer exec -C --bind "$WORKDIR" "$CONTAINER" samtools faidx "$TRANSCRIPT_FILTERED" -o "$TRANSCRIPT_FILTERED_INDEX"
+apptainer exec -C --bind "$WORKDIR" "$CONTAINER" samtools faidx "$PROTEIN_FILTERED" -o "$PROTEIN_FILTERED_INDEX"
+
+# list of genes ID 
+# the list is the same for both transcripts and proteins 
+GENE_LIST=$( cut -f1 "$TRANSCRIPT_FILTERED_INDEX" | awk -F'-R' '{ print $1}' | uniq ) 
+
+# initialise the files 
+> "$PROTEIN_LONG_LIST"
+> "$TRANSCRIPT_LONG_LIST"
+
+# filter to retain only the longest isoforms and creating a list 
+for GENE in $GENE_LIST
+do
+    grep "^${GENE}-R" "$TRANSCRIPT_FILTERED_INDEX" |
+        sort -k2,2nr |
+        head -n1 |
+        cut -f1 >> "$TRANSCRIPT_LONG_LIST"
+
+    grep "^${GENE}-R" "$PROTEIN_FILTERED_INDEX" |
+        sort -k2,2nr |
+        head -n1 |
+        cut -f1 >> "$PROTEIN_LONG_LIST"
+done
+
+# filtering the fasta files 
+apptainer exec --cleanenv --bind "$COURSEDIR" --bind "$WORKDIR" \
+    "$CONTAINER" seqkit grep -f "$TRANSCRIPT_LONG_LIST" "$TRANSCRIPT_FILTERED" -o "$TRANSCRIPT_FILTERED_LONG"
+
+apptainer exec --cleanenv --bind "$COURSEDIR" --bind "$WORKDIR" \
+    "$CONTAINER" seqkit grep -f "$PROTEIN_LONG_LIST" "$PROTEIN_FILTERED" -o "$PROTEIN_FILTERED_LONG"
 
 
 # Run BUSCO on the LONGEST protein and transcript sequences
-busco -i "${TRANSCRIPT_FILTERED_LONG}" -l brassicales_odb10 -o busco_proteins -m proteins -c 4
-busco -i "${PROTEIN_FILTERED_LONG}" -l brassicales_odb10 -o busco_transcripts -m transcriptome -c 4
+busco -i "${PROTEIN_FILTERED_LONG}" \
+    -l brassicales_odb10 \
+    -o busco_proteins \
+    --out_path "$OUTPUT_DIR" \
+    -m proteins -c 4
+
+busco -i "${TRANSCRIPT_FILTERED_LONG}" \
+    -l brassicales_odb10 \
+    -o busco_transcripts \
+    --out_path "$OUTPUT_DIR" \
+    -m transcriptome -c 4
