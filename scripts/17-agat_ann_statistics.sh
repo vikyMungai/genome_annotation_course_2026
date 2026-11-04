@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --job-name=busco_qc
+#SBATCH --job-name=agat_ann_statistics
 #SBATCH --partition=pibu_el8
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=4
@@ -19,12 +19,17 @@ COURSEDIR="/data/courses/genome_annotation_resources/2026"
 
 CONTAINER="${COURSEDIR}/containers/AGAT_v1.4.1.sif"
 
+# import module for function on file system 
+source "${WORKDIR}/scripts/utils/file_utils.sh"
+
 # input dir and files 
 INPUT_DIR="${WORKDIR}/output/filter_gff"
 FILTERED_GENES_GFF="${INPUT_DIR}/filtered.genes.renamed.gff3"
 
 OUTDIR="${WORKDIR}/output/agat_statistics"
 OUT_FILE="${OUTDIR}/annotation.stat"
+
+create_dir "$OUTDIR"
 
 apptainer exec --cleanenv --bind "$COURSEDIR" --bind "$WORKDIR" \
     "$CONTAINER" agat_sp_statistics.pl --gff "$FILTERED_GENES_GFF" --output "$OUT_FILE"

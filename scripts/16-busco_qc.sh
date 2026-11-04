@@ -37,6 +37,7 @@ PROTEIN_FILTERED="${INPUT_DIR}/assembly.all.maker.proteins.renamed.filtered.fast
 # output dir 
 OUTPUT_DIR="${RESULT_DIR}/busco_qc"
 
+create_dir "$OUTPUT_DIR"
 
 # retain only the longest protein and transcript per gene
 FILE_NAME_TRANSC=$(basename ${TRANSCRIPT_FILTERED%.filtered.fasta})

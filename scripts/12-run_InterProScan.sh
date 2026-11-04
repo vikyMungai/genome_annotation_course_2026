@@ -7,6 +7,7 @@
 #SBATCH --mem=16G
 #SBATCH --time=02:00:00
 #SBATCH --account=class-sbl-30004-ws-2026
+#SBATCH --reservation=class-sbl-30004-2026-10-30
 #SBATCH --mail-type=start,fail,end
 #SBATCH --output=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.out
 #SBATCH --error=/data/users/vmungai/genome_annotation_course_2026/logs/%x_%j.err
